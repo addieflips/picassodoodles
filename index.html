@@ -235,7 +235,7 @@
   .section-header p { color: var(--text-light); margin-top: 0.5rem; font-weight: 300; }
 
   /* PUPPY CARDS */
-  .puppy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .puppy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
   .puppy-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(61,43,26,0.08); transition: transform 0.3s, box-shadow 0.3s; }
   .puppy-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(61,43,26,0.15); }
   .puppy-slider { position: relative; aspect-ratio: 4/3; background: var(--tan); overflow: hidden; }
@@ -1788,11 +1788,12 @@
     const pPctX = typeof p.photoPosX === 'number' ? p.photoPosX : (p.photoPositionX==='left'?20:p.photoPositionX==='right'?80:50);
     const pPctY = typeof p.photoPosY === 'number' ? p.photoPosY : (p.photoPosition==='top'?20:p.photoPosition==='bottom'?80:50);
     const pImgStyle = pFit === 'contain'
-      ? 'width:100%;height:220px;object-fit:contain;object-position:center;background:var(--cream);border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box'
-      : 'width:100%;height:220px;object-fit:cover;object-position:' + pPctX + '% ' + pPctY + '%;border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box';
-    card.innerHTML = (photo ? '<img src="' + photo + '" alt="' + heading + '" style="' + pImgStyle + '">' : '<div style="width:100%;height:180px;background:var(--cream);border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:4rem">🐶</div>')
+      ? 'width:100%;aspect-ratio:1/1;object-fit:contain;object-position:center;background:var(--cream);border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box'
+      : 'width:100%;aspect-ratio:1/1;object-fit:cover;object-position:' + pPctX + '% ' + pPctY + '%;border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box';
+    card.innerHTML = (photo ? '<img src="' + photo + '" alt="' + heading + '" style="' + pImgStyle + '">' : '<div style="width:100%;aspect-ratio:1/1;background:var(--cream);border-radius:16px 16px 0 0;border:3px solid var(--brown-dark);border-bottom:none;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:4rem">🐶</div>')
       + '<div style="padding:1.2rem">'
-      + '<h3>' + heading + genderBadge + '</h3>'
+      + '<h3>' + heading + '</h3>'
+      + (genderBadge ? '<div style="margin:0.3rem 0">' + genderBadge + '</div>' : '')
       + '<p style="font-size:0.82rem;font-weight:700;color:' + statusColor + ';margin:0.3rem 0">' + (statusMap[p.status] || p.status || '') + '</p>'
       + (p.age ? '<p style="font-size:0.82rem;color:var(--text-light)">' + p.age + '</p>' : '')
       + (p.color ? '<p style="font-size:0.82rem;color:var(--text-light)">' + p.color + '</p>' : '')
@@ -1917,7 +1918,8 @@
         const manual = manualInfo[breed] || {};
         // Prefer an available puppy of this breed; otherwise use the manually-set breed photo; otherwise fall back to any breeding dog
         const matches = puppies.filter(p => (p.breed || '').trim() === breed);
-        const availablePup = matches.find(p => p.status === 'available' && p.featured) || matches.find(p => p.status === 'available') || matches[0];
+        const featuredPup = matches.find(p => p.featured);
+        const availablePup = featuredPup || matches.find(p => p.status === 'available') || matches[0];
         const fallbackDog = dogs.find(d => (d.breed || '').trim() === breed && (d.photo || (d.photos && d.photos[0])));
         const photo = availablePup ? (availablePup.photo || (availablePup.photos && availablePup.photos[0]) || '') : (manual.showcasePhoto || (fallbackDog ? (fallbackDog.photo || fallbackDog.photos[0]) : ''));
         const posStyle = (!availablePup && manual.showcasePhoto) ? 'object-position:' + (typeof manual.showcasePosX === 'number' ? manual.showcasePosX : 50) + '% ' + (typeof manual.showcasePosY === 'number' ? manual.showcasePosY : 50) + '%' : '';
