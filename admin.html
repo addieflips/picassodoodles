@@ -2254,6 +2254,18 @@ window.nudgePastLitterParentPhoto = async function(litterId, which, dx, dy, rese
   } catch(e) { console.error('nudgePastLitterParentPhoto error:', e); }
 };
 
+window.removePastLitterParentPhoto = async function(litterId, which) {
+  if (!confirm('Remove this photo?')) return;
+  const field = which + 'Photo';
+  try {
+    await updateDoc(doc(db, 'pastLitters', litterId), { [field]: '' });
+    if (window._itemData && window._itemData[litterId]) window._itemData[litterId][field] = '';
+    loadPastLitters();
+  } catch(e) {
+    alert('Error removing photo: ' + e.message);
+  }
+};
+
 window.addPastLitter = async function() {
   const date = document.getElementById('pl-date')?.value.trim() || '';
   const btn = document.getElementById('plbtn');
@@ -2381,8 +2393,8 @@ async function loadPastLitters() {
       }
       const parentHtml = (l.dadPhoto || l.momPhoto) ? (
         '<div style="display:flex;gap:1.5rem;margin-top:0.6rem;flex-wrap:wrap">'
-        + (l.dadPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-dad" src="' + l.dadPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + dadPX + '% ' + dadPY + '%;border-radius:50%;border:2px solid #7EB8D4">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.dad||'Dad') + '</div>' + nudgeGrid(d.id, 'dad') + '</div>' : '')
-        + (l.momPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-mom" src="' + l.momPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + momPX + '% ' + momPY + '%;border-radius:50%;border:2px solid #E8A0B8">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.mom||'Mom') + '</div>' + nudgeGrid(d.id, 'mom') + '</div>' : '')
+        + (l.dadPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-dad" src="' + l.dadPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + dadPX + '% ' + dadPY + '%;border-radius:50%;border:2px solid #7EB8D4">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.dad||'Dad') + '</div>' + nudgeGrid(d.id, 'dad') + '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;dad&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' + '</div>' : '')
+        + (l.momPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-mom" src="' + l.momPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + momPX + '% ' + momPY + '%;border-radius:50%;border:2px solid #E8A0B8">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.mom||'Mom') + '</div>' + nudgeGrid(d.id, 'mom') + '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;mom&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' + '</div>' : '')
         + '</div>'
       ) : '';
       return '<div class="icard">'
