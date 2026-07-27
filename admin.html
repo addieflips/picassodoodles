@@ -1665,6 +1665,29 @@ function withTimeout(promise, ms, label) {
   ]);
 }
 
+window.togglePuppyFeatured = async function(puppyId, breed, makeFeatured) {
+  try {
+    if (makeFeatured) {
+      // Unfeature any other puppy of the same breed first, so only one is featured
+      const snap = await getDocs(collection(db, 'puppies'));
+      const updates = [];
+      snap.docs.forEach(d => {
+        const data = d.data();
+        if (d.id !== puppyId && (data.breed || '').trim() === breed && data.featured) {
+          updates.push(updateDoc(doc(db, 'puppies', d.id), { featured: false }));
+        }
+      });
+      await Promise.all(updates);
+      await updateDoc(doc(db, 'puppies', puppyId), { featured: true });
+    } else {
+      await updateDoc(doc(db, 'puppies', puppyId), { featured: false });
+    }
+    loadPuppies();
+  } catch(e) {
+    alert('Error updating featured status: ' + e.message);
+  }
+};
+
 async function loadPuppies() {
   const list = document.getElementById('puppies-list');
   if (!list) return;
@@ -1704,6 +1727,7 @@ async function loadPuppies() {
               <strong>${p.breed} — ${p.sex || ''}</strong>
               <div style="display:flex;gap:0.5rem;align-items:center">
                 <span class="badge ${statusClass}">${p.status || 'available'}</span>
+                <button class="del" style="background:${p.featured ? '#fff3cd' : '#f0f0f0'};color:${p.featured ? '#8a6d1a' : '#555'}" onclick="togglePuppyFeatured('${d.id}','${p.breed}',${!p.featured})" title="Feature this puppy in the homepage breed showcase">${p.featured ? '⭐ Featured' : '☆ Feature'}</button>
                 <button class="del" style="background:#e0f0ff;color:#1a56a0" onclick="editItem('puppies','${d.id}')">✏️ Edit</button>
                 <button class="del" onclick="del('puppies','${d.id}')">🗑️ Delete</button>
               </div>
