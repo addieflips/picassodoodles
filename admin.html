@@ -2254,6 +2254,24 @@ window.nudgePastLitterParentPhoto = async function(litterId, which, dx, dy, rese
   } catch(e) { console.error('nudgePastLitterParentPhoto error:', e); }
 };
 
+window.updatePastLitterParentPhoto = async function(litterId, which, inputEl) {
+  const file = inputEl?.files?.[0];
+  if (!file) return;
+  const field = which + 'Photo';
+  const label = inputEl.closest('label');
+  const originalText = label ? label.firstChild.textContent : '';
+  if (label) label.firstChild.textContent = 'Uploading...';
+  try {
+    const url = await uploadOne(file);
+    await updateDoc(doc(db, 'pastLitters', litterId), { [field]: url });
+    if (window._itemData && window._itemData[litterId]) window._itemData[litterId][field] = url;
+    loadPastLitters();
+  } catch(e) {
+    alert('Error uploading photo: ' + e.message);
+    if (label) label.firstChild.textContent = originalText;
+  }
+};
+
 window.removePastLitterParentPhoto = async function(litterId, which) {
   if (!confirm('Remove this photo?')) return;
   const field = which + 'Photo';
@@ -2391,10 +2409,26 @@ async function loadPastLitters() {
           +   '<div></div>'
           + '</div>';
       }
-      const parentHtml = (l.dadPhoto || l.momPhoto) ? (
+      const parentHtml = (l.dad || l.mom || l.dadPhoto || l.momPhoto) ? (
         '<div style="display:flex;gap:1.5rem;margin-top:0.6rem;flex-wrap:wrap">'
-        + (l.dadPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-dad" src="' + l.dadPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + dadPX + '% ' + dadPY + '%;border-radius:50%;border:2px solid #7EB8D4">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.dad||'Dad') + '</div>' + nudgeGrid(d.id, 'dad') + '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;dad&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' + '</div>' : '')
-        + (l.momPhoto ? '<div style="text-align:center"><img id="pl-parent-preview-' + d.id + '-mom" src="' + l.momPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + momPX + '% ' + momPY + '%;border-radius:50%;border:2px solid #E8A0B8">' + '<div style="font-size:0.7rem;color:#7A6452">' + (l.mom||'Mom') + '</div>' + nudgeGrid(d.id, 'mom') + '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;mom&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' + '</div>' : '')
+        + ((l.dad || l.dadPhoto) ? '<div style="text-align:center">'
+            + (l.dadPhoto
+                ? '<img id="pl-parent-preview-' + d.id + '-dad" src="' + l.dadPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + dadPX + '% ' + dadPY + '%;border-radius:50%;border:2px solid #7EB8D4">'
+                : '<div style="width:60px;height:60px;border-radius:50%;background:#FAF6F0;border:2px solid #7EB8D4;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto">🎨</div>')
+            + '<div style="font-size:0.7rem;color:#7A6452">' + (l.dad||'Dad') + '</div>'
+            + (l.dadPhoto ? nudgeGrid(d.id, 'dad') : '')
+            + '<label style="font-size:0.65rem;color:#C47A5A;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">' + (l.dadPhoto ? 'Change photo' : 'Add photo') + '<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="updatePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;dad&quot;,this)"></label>'
+            + (l.dadPhoto ? '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;dad&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' : '')
+          + '</div>' : '')
+        + ((l.mom || l.momPhoto) ? '<div style="text-align:center">'
+            + (l.momPhoto
+                ? '<img id="pl-parent-preview-' + d.id + '-mom" src="' + l.momPhoto + '" style="width:60px;height:60px;object-fit:cover;object-position:' + momPX + '% ' + momPY + '%;border-radius:50%;border:2px solid #E8A0B8">'
+                : '<div style="width:60px;height:60px;border-radius:50%;background:#FAF6F0;border:2px solid #E8A0B8;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto">🌸</div>')
+            + '<div style="font-size:0.7rem;color:#7A6452">' + (l.mom||'Mom') + '</div>'
+            + (l.momPhoto ? nudgeGrid(d.id, 'mom') : '')
+            + '<label style="font-size:0.65rem;color:#C47A5A;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">' + (l.momPhoto ? 'Change photo' : 'Add photo') + '<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="updatePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;mom&quot;,this)"></label>'
+            + (l.momPhoto ? '<a href="javascript:void(0)" onclick="removePastLitterParentPhoto(&quot;' + d.id + '&quot;,&quot;mom&quot;)" style="font-size:0.65rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' : '')
+          + '</div>' : '')
         + '</div>'
       ) : '';
       return '<div class="icard">'
