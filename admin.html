@@ -2149,6 +2149,17 @@ window.saveEdit = async function(col, docId) {
 
 // ── FIREBASE INIT ──────────────────────────────────────────────
 // ── LITTERS ──────────────────────────────────────────────────
+window.removeLitterParentPhoto = async function(docId, field) {
+  if (!confirm('Remove this photo?')) return;
+  try {
+    await updateDoc(doc(db, 'litters', docId), { [field]: '' });
+    if (window._itemData && window._itemData[docId]) window._itemData[docId][field] = '';
+    loadLitters();
+  } catch(e) {
+    alert('Error removing photo: ' + e.message);
+  }
+};
+
 window.updateLitterParentPhoto = async function(docId, field, inputEl) {
   const file = inputEl?.files?.[0];
   if (!file) return;
@@ -2488,12 +2499,14 @@ async function loadLitters() {
         +   '<div style="font-size:0.72rem;color:#7A6452;margin-bottom:0.3rem">' + (l.dad || 'Dad') + '</div>'
         +   (l.dadPhoto ? '<a href="javascript:void(0)" onclick="downloadImage(&quot;' + l.dadPhoto + '&quot;,&quot;litter-' + id + '-dad.jpg&quot;)" style="font-size:0.68rem;color:#1a56a0;cursor:pointer;text-decoration:underline;display:block;margin-bottom:0.2rem">Download</a>' : '')
         +   '<label style="font-size:0.68rem;color:#C47A5A;cursor:pointer;text-decoration:underline">Change photo<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="updateLitterParentPhoto(&quot;' + id + '&quot;,&quot;dadPhoto&quot;,this)"></label>'
+        +   (l.dadPhoto ? '<a href="javascript:void(0)" onclick="removeLitterParentPhoto(&quot;' + id + '&quot;,&quot;dadPhoto&quot;)" style="font-size:0.68rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' : '')
         + '</div>'
         + '<div style="text-align:center">'
         +   (l.momPhoto ? '<img src="' + l.momPhoto + '" style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid #E8A0B8;display:block;margin:0 auto 0.3rem">' : '<div style="width:70px;height:70px;border-radius:10px;background:#FAF6F0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 0.3rem">🌸</div>')
         +   '<div style="font-size:0.72rem;color:#7A6452;margin-bottom:0.3rem">' + (l.mom || 'Mom') + '</div>'
         +   (l.momPhoto ? '<a href="javascript:void(0)" onclick="downloadImage(&quot;' + l.momPhoto + '&quot;,&quot;litter-' + id + '-mom.jpg&quot;)" style="font-size:0.68rem;color:#1a56a0;cursor:pointer;text-decoration:underline;display:block;margin-bottom:0.2rem">Download</a>' : '')
         +   '<label style="font-size:0.68rem;color:#C47A5A;cursor:pointer;text-decoration:underline">Change photo<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="updateLitterParentPhoto(&quot;' + id + '&quot;,&quot;momPhoto&quot;,this)"></label>'
+        +   (l.momPhoto ? '<a href="javascript:void(0)" onclick="removeLitterParentPhoto(&quot;' + id + '&quot;,&quot;momPhoto&quot;)" style="font-size:0.68rem;color:#c0392b;cursor:pointer;text-decoration:underline;display:block;margin-top:0.2rem">Remove</a>' : '')
         + '</div>'
         + '</div>'
       ) : '';
