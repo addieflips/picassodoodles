@@ -1917,7 +1917,7 @@
         const manual = manualInfo[breed] || {};
         // Prefer an available puppy of this breed; otherwise use the manually-set breed photo; otherwise fall back to any breeding dog
         const matches = puppies.filter(p => (p.breed || '').trim() === breed);
-        const availablePup = matches.find(p => p.status === 'available') || matches[0];
+        const availablePup = matches.find(p => p.status === 'available' && p.featured) || matches.find(p => p.status === 'available') || matches[0];
         const fallbackDog = dogs.find(d => (d.breed || '').trim() === breed && (d.photo || (d.photos && d.photos[0])));
         const photo = availablePup ? (availablePup.photo || (availablePup.photos && availablePup.photos[0]) || '') : (manual.showcasePhoto || (fallbackDog ? (fallbackDog.photo || fallbackDog.photos[0]) : ''));
         const posStyle = (!availablePup && manual.showcasePhoto) ? 'object-position:' + (typeof manual.showcasePosX === 'number' ? manual.showcasePosX : 50) + '% ' + (typeof manual.showcasePosY === 'number' ? manual.showcasePosY : 50) + '%' : '';
