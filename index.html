@@ -154,7 +154,7 @@
   /* BREED SHOWCASE */
   .breed-showcase { padding: 4rem 2rem; background: var(--tan); }
   .breed-showcase-inner { max-width: 1200px; margin: 0 auto; }
-  .breed-showcase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .breed-showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 384px)); gap: 1.5rem; justify-content: center; }
   .breed-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; box-shadow: 0 8px 30px rgba(61,43,26,0.12); }
   .breed-card-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .breed-card-fallback { position: absolute; inset: 0; background: linear-gradient(135deg, var(--brown-light), var(--brown)); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
