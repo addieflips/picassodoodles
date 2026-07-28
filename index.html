@@ -154,7 +154,7 @@
   /* BREED SHOWCASE */
   .breed-showcase { padding: 4rem 2rem; background: var(--tan); }
   .breed-showcase-inner { max-width: 1200px; margin: 0 auto; }
-  .breed-showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 384px)); gap: 1.5rem; justify-content: center; }
+  .breed-showcase-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 384px)); gap: 1.5rem; justify-content: center; }
   .breed-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; box-shadow: 0 8px 30px rgba(61,43,26,0.12); }
   .breed-card-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .breed-card-fallback { position: absolute; inset: 0; background: linear-gradient(135deg, var(--brown-light), var(--brown)); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
@@ -803,6 +803,7 @@
       <div id="breed-showcase-grid" class="breed-showcase-grid">
         <div class="breed-card"><div class="breed-card-fallback">🐻</div><div class="breed-card-overlay"></div><div class="breed-card-content"><div class="breed-card-title">Bernedoodle</div><div class="breed-card-btns"><a href="javascript:void(0)" onclick="return showPage('puppies')" class="breed-card-btn">See Puppies</a></div></div></div>
         <div class="breed-card"><div class="breed-card-fallback">⛰️</div><div class="breed-card-overlay"></div><div class="breed-card-content"><div class="breed-card-title">Australian Mountain Doodle</div><div class="breed-card-btns"><a href="javascript:void(0)" onclick="return showPage('puppies')" class="breed-card-btn">See Puppies</a></div></div></div>
+        <div class="breed-card"><div class="breed-card-fallback">🐾</div><div class="breed-card-overlay"></div><div class="breed-card-content"><div class="breed-card-title">See All Puppies</div><div class="breed-card-btns"><a href="javascript:void(0)" onclick="return showPage('puppies')" class="breed-card-btn">View All</a></div></div></div>
       </div>
     </div>
   </section>
@@ -1904,14 +1905,16 @@
     const BREEDS = ['Bernedoodle', 'Australian Mountain Doodle'];
     const BREED_ICONS = { 'Bernedoodle': '🐻', 'Australian Mountain Doodle': '⛰️' };
     try {
-      const [puppiesSnap, dogsSnap, breedInfoSnap] = await Promise.all([
+      const [puppiesSnap, dogsSnap, breedInfoSnap, seeAllSnap] = await Promise.all([
         withTimeout(getDocs(collection(db, 'puppies')), 15000, 'Loading breeds'),
         withTimeout(getDocs(collection(db, 'breedingDogs')), 15000, 'Loading breeds'),
-        withTimeout(getDoc(doc(db, 'siteContent', 'breedInfo')), 15000, 'Loading breeds')
+        withTimeout(getDoc(doc(db, 'siteContent', 'breedInfo')), 15000, 'Loading breeds'),
+        withTimeout(getDoc(doc(db, 'siteContent', 'seeAllCard')), 15000, 'Loading breeds')
       ]);
       const puppies = puppiesSnap.docs.map(d => d.data());
       const dogs = dogsSnap.docs.map(d => d.data());
       const manualInfo = breedInfoSnap.exists() ? breedInfoSnap.data() : {};
+      const seeAllInfo = seeAllSnap.exists() ? seeAllSnap.data() : {};
       grid.innerHTML = BREEDS.map(function(breed) {
         const manual = manualInfo[breed] || {};
         // Prefer an available puppy of this breed; otherwise use the manually-set breed photo; otherwise fall back to any breeding dog
@@ -1936,7 +1939,18 @@
           +   '<div class="breed-card-btns">' + btnsHtml + '</div>'
           + '</div>'
           + '</div>';
-      }).join('');
+      }).join('') + (
+        '<div class="breed-card">'
+        + (seeAllInfo.photo
+            ? '<img src="' + seeAllInfo.photo + '" class="breed-card-bg" alt="See All Puppies" style="object-position:' + (typeof seeAllInfo.posX === 'number' ? seeAllInfo.posX : 50) + '% ' + (typeof seeAllInfo.posY === 'number' ? seeAllInfo.posY : 50) + '%">'
+            : '<div class="breed-card-fallback">🐾</div>')
+        + '<div class="breed-card-overlay"></div>'
+        + '<div class="breed-card-content">'
+        +   '<div class="breed-card-title">See All Puppies</div>'
+        +   '<div class="breed-card-btns"><a href="javascript:void(0)" onclick="return showPage(&quot;puppies&quot;)" class="breed-card-btn">View All</a></div>'
+        + '</div>'
+        + '</div>'
+      );
     } catch(e) {
       console.error('loadBreedShowcase error:', e);
       grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem"><p style="color:#dc2626;margin-bottom:1rem">' + (e.message || 'Error loading breeds.') + '</p><a href="javascript:void(0)" onclick="loadBreedShowcase()" class="btn-primary" style="text-decoration:none;display:inline-block">🔄 Try Again</a></div>';
