@@ -225,7 +225,7 @@ input:focus,select:focus,textarea:focus { border-color:#C47A5A; background:white
     <div class="card">
       <h3 style="margin-bottom:1rem">➕ Add Litter</h3>
       <div class="grid">
-        <div class="fg"><label>Breed *</label><select id="l-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option><option>Aussie Doodle</option></select></div>
+        <div class="fg"><label>Breed *</label><select id="l-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option></select></div>
         <div class="fg"><label>Expected Date *</label><input id="l-date" placeholder="e.g. August 2025"></div>
         <div class="fg"><label>Expected Size</label><input id="l-size" placeholder="e.g. Medium–Large"></div>
         <div class="fg"><label>Expected Weight (lbs)</label><input id="l-lbs" placeholder="e.g. 45–65 lbs"></div>
@@ -270,7 +270,7 @@ input:focus,select:focus,textarea:focus { border-color:#C47A5A; background:white
       <h3>➕ Add Puppy</h3>
       <div class="grid" style="margin-top:1rem">
         <div class="slabel">Basic Info</div>
-        <div class="fg"><label>Breed *</label><select id="p-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option><option>Aussie Doodle</option></select></div>
+        <div class="fg"><label>Breed *</label><select id="p-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option></select></div>
         <div class="fg"><label>Sex *</label><select id="p-sex"><option>Male</option><option>Female</option></select></div>
         <div class="fg"><label>Age / Date of Birth</label><input id="p-age" placeholder="e.g. Jan 15 2025"></div>
         <div class="fg"><label>Coloring / Coat Type</label><input id="p-color" placeholder="e.g. Tri-color, wavy"></div>
@@ -868,7 +868,7 @@ input:focus,select:focus,textarea:focus { border-color:#C47A5A; background:white
     <div class="card">
       <h3 style="margin-bottom:1rem">➕ Add Past Litter</h3>
       <div class="grid">
-        <div class="fg"><label>Breed *</label><select id="pl-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option><option>Aussie Doodle</option></select></div>
+        <div class="fg"><label>Breed *</label><select id="pl-breed"><option>Bernedoodle</option><option>Australian Mountain Doodle</option></select></div>
         <div class="fg"><label>Litter Date *</label><input id="pl-date" placeholder="e.g. March 2025"></div>
         <div class="fg"><label>Father's Name</label><input id="pl-dad" placeholder="e.g. Theo"></div>
         <div class="fg"><label>Mother's Name</label><input id="pl-mom" placeholder="e.g. Bella"></div>
@@ -986,7 +986,6 @@ input:focus,select:focus,textarea:focus { border-color:#C47A5A; background:white
         <select id="wl-breed-filter" style="border:1px solid #E8D5B7;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;color:#3D2B1A" onchange="window._loadWaitlistFn()">
           <option value="">All Breeds</option>
           <option value="Bernedoodle">Bernedoodle</option>
-          <option value="Aussiedoodle">Aussiedoodle</option>
           <option value="Australian Mountain Doodle">Australian Mountain Doodle</option>
         </select>
         <button type="button" class="btn btn-sm" onclick="window._loadWaitlistFn()">🔄 Refresh</button>
@@ -1266,7 +1265,7 @@ async function aiGen(promptId, resultId, targetId) {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000,
-        messages:[{role:'user',content:`Write content for Picasso Doodles, a dog breeding business in Utah specializing in Bernedoodles, Australian Mountain Doodles, and Aussie Doodles.\n\nRequest: ${prompt}\n\nReturn only the content text.`}]})
+        messages:[{role:'user',content:`Write content for Picasso Doodles, a dog breeding business in Utah specializing in Bernedoodles and Australian Mountain Doodles.\n\nRequest: ${prompt}\n\nReturn only the content text.`}]})
     });
     const data = await res.json();
     const text = data.content?.[0]?.text || 'No response.';
@@ -2059,7 +2058,7 @@ window.editItem = function(col, docId, dataStr) {
   if (existing) existing.remove();
 
   const fields = col === 'puppies' ? [
-    {id:'breed',    label:'Breed',              val:data.breed||'',            type:'select', opts:['Bernedoodle','Australian Mountain Doodle','Aussie Doodle']},
+    {id:'breed',    label:'Breed',              val:data.breed||'',            type:'select', opts:['Bernedoodle','Australian Mountain Doodle']},
     {id:'sex',      label:'Sex',                val:data.sex||'Male',          type:'select', opts:['Male','Female']},
     {id:'age',      label:'Age / Date of Birth',val:data.age||''},
     {id:'color',    label:'Coloring / Coat',    val:data.color||''},
@@ -2084,13 +2083,13 @@ window.editItem = function(col, docId, dataStr) {
     {id:'dam',           label:'Dam / Mom',     val:data.dam||''},
     {id:'extra',         label:'Extra Notes',   val:data.extra||'',        type:'textarea'},
   ] : col === 'pastLitters' ? [
-    {id:'breed',        label:'Breed',          val:data.breed||'',        type:'select', opts:['Bernedoodle','Australian Mountain Doodle','Aussie Doodle']},
+    {id:'breed',        label:'Breed',          val:data.breed||'',        type:'select', opts:['Bernedoodle','Australian Mountain Doodle']},
     {id:'litterDate',   label:'Litter Date',    val:data.litterDate||''},
     {id:'dad',          label:"Father's Name",  val:data.dad||''},
     {id:'mom',          label:"Mother's Name",  val:data.mom||''},
     {id:'notes',        label:'Notes',          val:data.notes||'',        type:'textarea'},
   ] : [
-    {id:'breed',        label:'Breed',          val:data.breed||'',        type:'select', opts:['Bernedoodle','Australian Mountain Doodle','Aussie Doodle']},
+    {id:'breed',        label:'Breed',          val:data.breed||'',        type:'select', opts:['Bernedoodle','Australian Mountain Doodle']},
     {id:'expectedDate', label:'Expected Date',  val:data.expectedDate||''},
     {id:'size',         label:'Expected Size',  val:data.size||''},
     {id:'pounds',       label:'Expected Weight',val:data.pounds||''},
@@ -2792,7 +2791,7 @@ window.addTestimonial = async function() {
   } catch(e) { showBanner('t-err'); }
 };
 
-const BREED_INFO_LIST = ['Bernedoodle', 'Aussie Doodle', 'Australian Mountain Doodle'];
+const BREED_INFO_LIST = ['Bernedoodle', 'Australian Mountain Doodle'];
 var _breedInfoData = {}; // { breed: { photo, posX, posY, desc, checklist: [4 strings] } }
 
 async function loadBreedInfoAdmin() {
@@ -2929,7 +2928,7 @@ window.saveBreedInfoText = async function(breed, safeId) {
   } catch(e) { alert('Error saving: ' + e.message); }
 };
 
-const WAITLIST_BREEDS = ['Bernedoodle', 'Aussiedoodle', 'Australian Mountain Doodle'];
+const WAITLIST_BREEDS = ['Bernedoodle', 'Australian Mountain Doodle'];
 var _wlBreedPhotos = {}; // { breed: { url, posX, posY } }
 
 async function loadWaitlistBreedPhotos() {
@@ -4002,7 +4001,7 @@ window.saveInstagram   = window.saveSocialButtons;
 
 
   // ── WAITLIST BREEDS ────────────────────────────────────────────
-  const DEFAULT_BREEDS = ['Bernedoodle', 'Aussiedoodle', 'Australian Mountain Doodle'];
+  const DEFAULT_BREEDS = ['Bernedoodle', 'Australian Mountain Doodle'];
 
   async function loadWaitlistBreeds() {
     const listEl = document.getElementById('breed-list');
