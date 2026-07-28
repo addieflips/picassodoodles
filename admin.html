@@ -859,6 +859,7 @@ input:focus,select:focus,textarea:focus { border-color:#C47A5A; background:white
     <div class="ptitle">🐾 Breed Info & Photos</div>
     <div class="psub">Controls the breed spotlight cards (photo & description) on the "About Our Dogs" page, and the fallback photo for the breed showcase cards on your home page</div>
     <div id="breedinfo-manager"></div>
+    <div id="seeall-card-manager" style="margin-top:1rem"></div>
   </div>
 
   <!-- ═══ PAST LITTERS ═══ -->
@@ -2679,7 +2680,7 @@ window.tabChange = function(id) {
   if (id === 'reservations') loadReservations();
   if (id === 'hero')        { loadHeroSection(); if(typeof loadInstagram==='function') loadInstagram(); if(typeof loadStripPhotos==='function') loadStripPhotos(); if(typeof loadHeroPhotoManager==='function') loadHeroPhotoManager(); }
   if (id === 'testimonials') loadTestimonials();
-  if (id === 'breedinfo') loadBreedInfoAdmin();
+  if (id === 'breedinfo') { loadBreedInfoAdmin(); loadSeeAllCardAdmin(); }
   if (id === 'pastlitters') loadPastLitters();
   if (id === 'about')       { loadAbout(); loadAboutPhoto(); }
   if (id === 'contact')     loadContact();
@@ -2926,6 +2927,100 @@ window.saveBreedInfoText = async function(breed, safeId) {
     await setDoc(doc(db, 'siteContent', 'breedInfo'), { [breed]: b, updatedAt: new Date().toISOString() }, { merge: true });
     if (okEl) { okEl.style.display = 'block'; setTimeout(() => { if(okEl) okEl.style.display='none'; }, 2500); }
   } catch(e) { alert('Error saving: ' + e.message); }
+};
+
+var _seeAllCardData = { photo: '', posX: 50, posY: 50 };
+
+async function loadSeeAllCardAdmin() {
+  const el = document.getElementById('seeall-card-manager');
+  if (!el) return;
+  try {
+    const snap = await getDoc(doc(db, 'siteContent', 'seeAllCard'));
+    const data = snap.exists() ? snap.data() : {};
+    _seeAllCardData = {
+      photo: data.photo || '',
+      posX: typeof data.posX === 'number' ? data.posX : 50,
+      posY: typeof data.posY === 'number' ? data.posY : 50
+    };
+    renderSeeAllCardAdmin();
+  } catch(e) {
+    console.error('loadSeeAllCardAdmin error:', e);
+    el.innerHTML = '<p style="color:#dc2626;padding:1rem">Error loading See All card.</p>';
+  }
+}
+
+function renderSeeAllCardAdmin() {
+  const el = document.getElementById('seeall-card-manager');
+  if (!el) return;
+  const b = _seeAllCardData;
+  el.innerHTML = '<div class="card">'
+    + '<h3 style="margin-bottom:0.8rem">🐾 "See All Puppies" Card</h3>'
+    + '<p style="font-size:0.78rem;color:#7A6452;margin-bottom:0.8rem">Optional photo for the third card in the home page breed showcase row. Leave blank to keep the paw icon.</p>'
+    + '<div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">'
+    +   '<div style="text-align:center">'
+    +     (b.photo
+            ? '<img id="seeall-preview" src="' + b.photo + '" style="width:100px;height:125px;object-fit:cover;object-position:' + b.posX + '% ' + b.posY + '%;border-radius:8px;border:2px solid #E8D5B7;display:block">'
+            : '<div style="width:100px;height:125px;background:#E8D5B7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem">🐾</div>')
+    +   '</div>'
+    +   (b.photo ? (
+          '<div style="display:grid;grid-template-columns:repeat(3,28px);grid-template-rows:repeat(3,28px);gap:2px">'
+          +   '<div></div>'
+          +   '<button type="button" onclick="nudgeSeeAllCardPhoto(0,-10)" style="border:1px solid #ddd;background:#f0f0f0;border-radius:6px;cursor:pointer">↑</button>'
+          +   '<div></div>'
+          +   '<button type="button" onclick="nudgeSeeAllCardPhoto(-10,0)" style="border:1px solid #ddd;background:#f0f0f0;border-radius:6px;cursor:pointer">←</button>'
+          +   '<button type="button" onclick="nudgeSeeAllCardPhoto(0,0,true)" title="Reset" style="border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;font-size:0.7rem">⟲</button>'
+          +   '<button type="button" onclick="nudgeSeeAllCardPhoto(10,0)" style="border:1px solid #ddd;background:#f0f0f0;border-radius:6px;cursor:pointer">→</button>'
+          +   '<div></div>'
+          +   '<button type="button" onclick="nudgeSeeAllCardPhoto(0,10)" style="border:1px solid #ddd;background:#f0f0f0;border-radius:6px;cursor:pointer">↓</button>'
+          +   '<div></div>'
+          + '</div>'
+        ) : '')
+    +   '<div>'
+    +     '<label style="display:block;cursor:pointer">'
+    +       '<span style="background:#F5A623;color:#fff;font-size:0.78rem;font-weight:600;padding:0.4rem 0.9rem;border-radius:6px;display:inline-block">' + (b.photo ? 'Change Photo' : 'Upload Photo') + '</span>'
+    +       '<input type="file" accept="image/*,.heic,.heif" style="display:none" id="seeall-file" onchange="uploadSeeAllCardPhoto()">'
+    +     '</label>'
+    +     (b.photo ? '<a href="javascript:void(0)" onclick="removeSeeAllCardPhoto()" style="display:block;margin-top:0.4rem;font-size:0.72rem;color:#c0392b;cursor:pointer;text-decoration:underline">Remove photo</a>' : '')
+    +   '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+window.nudgeSeeAllCardPhoto = async function(dx, dy, reset) {
+  const b = _seeAllCardData;
+  if (reset) { b.posX = 50; b.posY = 50; }
+  else {
+    b.posX = Math.max(0, Math.min(100, b.posX + dx));
+    b.posY = Math.max(0, Math.min(100, b.posY + dy));
+  }
+  const preview = document.getElementById('seeall-preview');
+  if (preview) preview.style.objectPosition = b.posX + '% ' + b.posY + '%';
+  try {
+    await setDoc(doc(db, 'siteContent', 'seeAllCard'), b, { merge: true });
+  } catch(e) { console.error('nudgeSeeAllCardPhoto error:', e); }
+};
+
+window.uploadSeeAllCardPhoto = async function() {
+  const input = document.getElementById('seeall-file');
+  const file = input?.files?.[0];
+  if (!file) return;
+  try {
+    const url = await uploadOne(file);
+    _seeAllCardData.photo = url;
+    _seeAllCardData.posX = 50;
+    _seeAllCardData.posY = 50;
+    await setDoc(doc(db, 'siteContent', 'seeAllCard'), _seeAllCardData, { merge: true });
+    renderSeeAllCardAdmin();
+  } catch(e) { alert('Error uploading photo: ' + e.message); }
+};
+
+window.removeSeeAllCardPhoto = async function() {
+  if (!confirm('Remove this photo?')) return;
+  _seeAllCardData.photo = '';
+  try {
+    await setDoc(doc(db, 'siteContent', 'seeAllCard'), _seeAllCardData, { merge: true });
+    renderSeeAllCardAdmin();
+  } catch(e) { alert('Error removing photo: ' + e.message); }
 };
 
 const WAITLIST_BREEDS = ['Bernedoodle', 'Australian Mountain Doodle'];
