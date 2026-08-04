@@ -1767,7 +1767,7 @@
     card.className = 'puppy-card';
     if (isMale)   card.style.cssText += 'border-top:4px solid #7EB8D4;';
     if (isFemale) card.style.cssText += 'border-top:4px solid #E8A0B8;';
-    const heading = [p.breed, p.sex].filter(Boolean).join(' — ') || 'Puppy';
+    const heading = [p.name, p.breed, p.sex].filter(Boolean).join(' — ') || 'Puppy';
     const genderBadge = isMale   ? '<span style="background:#D6EEF8;color:#2A6F8E;border-radius:20px;padding:0.2rem 0.7rem;font-size:0.75rem;font-weight:600;margin-left:0.5rem">♂ Boy</span>'
                       : isFemale ? '<span style="background:#FADADD;color:#9C3558;border-radius:20px;padding:0.2rem 0.7rem;font-size:0.75rem;font-weight:600;margin-left:0.5rem">♀ Girl</span>'
                       : '';
@@ -1879,7 +1879,7 @@
       section.style.display = 'block';
       grid.innerHTML = candidates.map(function(p) {
         const photo = p.photo || (p.photos && p.photos[0]) || '';
-        const heading = [p.breed, p.sex].filter(Boolean).join(' — ') || 'Puppy';
+        const heading = [p.name, p.breed, p.sex].filter(Boolean).join(' — ') || 'Puppy';
         const hasSpecial = p.specialPrice && parseFloat(p.specialPrice) > 0;
         const priceHtml = hasSpecial
           ? '<p style="margin:0.4rem 0"><span style="text-decoration:line-through;color:var(--text-light);font-size:0.85rem;margin-right:0.5rem">$' + p.price + '</span><span style="font-weight:700;color:#C0392B;font-size:1.1rem">$' + p.specialPrice + '</span></p>'
