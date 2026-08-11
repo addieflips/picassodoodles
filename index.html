@@ -165,7 +165,7 @@
   .breed-card-btn { background: white; color: var(--espresso); font-weight: 600; font-size: 0.85rem; padding: 0.6rem 1.4rem; border-radius: 8px; text-decoration: none; display: inline-block; border: none; cursor: pointer; font-family: 'Jost', sans-serif; transition: transform 0.2s; }
   .breed-card-btn:hover { transform: translateY(-2px); }
   .breed-card-btn.secondary { background: rgba(255,255,255,0.15); color: white; border: 1.5px solid rgba(255,255,255,0.7); }
-  @media(max-width: 900px) { .breed-showcase-grid { grid-template-columns: 1fr; } }
+  @media(max-width: 900px) { }
   @media(max-width: 480px) { .breed-showcase { padding: 3rem 1.2rem; } .breed-showcase-grid { gap: 1rem; } }
 
   /* WELCOME SECTION */
@@ -178,7 +178,7 @@
   .welcome-photo { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; box-shadow: 0 10px 35px rgba(61,43,26,0.15); }
   .welcome-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .welcome-photo .breed-card-fallback { position: absolute; inset: 0; font-size: 4rem; }
-  @media(max-width: 900px) { .welcome-inner { grid-template-columns: 1fr; } .welcome-text { text-align: center; } .welcome-btns { justify-content: center; } .welcome-photo { order: -1; max-width: 400px; margin: 0 auto; } }
+  @media(max-width: 900px) { }
 
   /* BREED DETAIL CARDS */
   .breed-detail-section { padding: 5rem 2rem; background: var(--cream); }
@@ -219,7 +219,7 @@
   .why-photo { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; box-shadow: 0 10px 35px rgba(61,43,26,0.15); }
   .why-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .why-photo .breed-card-fallback { position: absolute; inset: 0; font-size: 4rem; }
-  @media(max-width: 900px) { .why-inner { grid-template-columns: 1fr; } .why-photo { order: -1; max-width: 400px; margin: 0 auto; } }
+  @media(max-width: 900px) { }
 
   /* LAST CHANCE PUPPIES */
   .last-chance-section { padding: 4rem 2rem; background: var(--warm-white); }
@@ -268,7 +268,7 @@
   .review-card .review-text { font-size: 0.88rem; color: var(--text-light); line-height: 1.7; margin-bottom: 0.5rem; }
   .review-card .review-author { font-size: 0.82rem; font-weight: 600; color: var(--espresso); }
   .review-card .review-meta { font-size: 0.75rem; color: var(--brown-light); }
-  @media(max-width: 800px) { .reviews-columns { grid-template-columns: 1fr; } }
+  @media(max-width: 800px) { }
   .review-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(61,43,26,0.08); }
   .stars { color: #F5A623; font-size: 1rem; margin-bottom: 1rem; letter-spacing: 2px; }
   .review-text { font-size: 0.95rem; color: var(--text-light); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; font-weight: 300; }
@@ -546,18 +546,18 @@
     .hero-content { max-width: 100%; }
     .hero-inner { padding: 4rem 1.5rem; }
     .why-grid { grid-template-columns: repeat(2, 1fr); }
-    .puppy-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+    .puppy-grid, .reviews-grid { grid-template-columns: repeat(3, 1fr); }
     .footer-top { grid-template-columns: 1fr 1fr; }
     .footer-faq-grid { grid-template-columns: 1fr; }
     .reserve-steps { grid-template-columns: 1fr; }
     .included-grid { grid-template-columns: repeat(2, 1fr); }
-    .litter-grid, .parent-grid { grid-template-columns: 1fr; }
+    .litter-grid, .parent-grid { grid-template-columns: repeat(3, 1fr); }
     .footer-contact-grid { grid-template-columns: 1fr; }
   }
   @media(max-width: 600px) {
   .nav-links { display: none; }
     .hamburger { display: flex; }
-    .puppy-grid, .reviews-grid { grid-template-columns: 1fr; }
+    .puppy-grid, .reviews-grid { grid-template-columns: repeat(3, 1fr); }
     .why-grid { grid-template-columns: 1fr 1fr; }
     .form-grid { grid-template-columns: 1fr; }
     .footer-top { grid-template-columns: 1fr; }
@@ -3023,10 +3023,10 @@
     if (shouldShow()) {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(showPopup, 45000);
+          setTimeout(showPopup, 5000);
         });
       } else {
-        setTimeout(showPopup, 45000);
+        setTimeout(showPopup, 5000);
       }
     }
   })();
