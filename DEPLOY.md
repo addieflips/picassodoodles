@@ -101,6 +101,40 @@ Your contact address is a plain Gmail (`picassodoodlesworldwide@gmail.com`), so
 this is probably empty — but it's a ten-second check against a problem that's
 miserable to debug later.
 
+### If Wix blocks you: "paid for with a payment method that doesn't belong to you"
+
+Wix refuses the transfer when the card paying for the domain belongs to someone
+else, and offers an **Update payment method** link. That link is the fix — but
+work out *whose card it is* before you click, because Wix warns that the previous
+payment method's owner "won't have full access to the domain" afterwards.
+
+**Whose card is it?**
+
+- **Your own old or expired card, or a spouse's / family member's** → just update
+  it to a card you own and carry on. Nothing to worry about.
+- **A web designer, developer, agency, or friend who built the original site** →
+  talk to them first. Not because you need their permission to own your own
+  domain, but because they may have other things billed to that account, and a
+  surprise loss of access is a bad way for them to find out. A two-line message
+  saves a relationship.
+
+**Paying is not the same as owning.** The registered owner of a domain is the
+**registrant contact**, not whoever's card is attached. So updating the payment
+method doesn't take the domain from anyone — it moves the billing to you and
+restores your ability to act on a domain you already hold. If there's genuine
+disagreement about who owns `picassodoodles.com`, sort that out with the person
+directly; Wix's billing screen is not the place to settle it.
+
+**Good news on timing:** changing the payment method is *not* a registrant contact
+change, so it does **not** start a fresh 60-day transfer lock. Update the card and
+you can request the transfer straight away.
+
+**If you can't update it** — the card owner is unreachable, or the account is
+locked to them — contact Wix support directly. Proving you're the registrant is a
+route they can act on. Whatever happens, **do not let the domain expire** hoping
+to re-register it at GoDaddy: expired domains get picked up by squatters within
+hours, and you would not get it back.
+
 **At Wix:**
 1. Wix account → **Domains**
 2. **Domain Actions** icon next to `picassodoodles.com` → **Transfer away from Wix**
