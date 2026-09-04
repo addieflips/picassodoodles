@@ -72,6 +72,35 @@ Two more things while you're there:
 - **Turn off Private Registration.** The authorization code is emailed to the
   registrant address, and privacy protection can hide or block it.
 
+> #### ⚠️ Don't touch "Edit contact info"
+>
+> It sits right above "Transfer away from Wix" in the Domain Actions menu, and
+> it's the one item that can cost you a week. Changing the registrant name, email,
+> or organization starts a **fresh 60-day ICANN transfer lock** — even if the
+> domain is transferable today. Leave contact info exactly as it is until the
+> transfer has completed; fix it at GoDaddy afterwards if it needs fixing.
+>
+> Toggling Private Registration off is a different setting and is safe.
+>
+> Also leave **"Unassign from this site"** alone. It disconnects the domain from
+> the Wix site, taking `picassodoodles.com` down early for no benefit. The
+> transfer doesn't need it, and Step 5 removes the Wix site anyway.
+
+### Check MX records before you transfer
+
+If any email address uses `@picassodoodles.com`, the transfer plus the DNS change
+in Step 3 will break it unless you carry the MX records across.
+
+Wix → Domain Actions → **Edit MX records**. Screenshot whatever is there.
+
+- **Empty, or Wix defaults you don't use** → nothing to do.
+- **Real mail records** (Google Workspace, Outlook, etc.) → re-create the same MX
+  records at GoDaddy in Step 3, alongside the A and CNAME.
+
+Your contact address is a plain Gmail (`picassodoodlesworldwide@gmail.com`), so
+this is probably empty — but it's a ten-second check against a problem that's
+miserable to debug later.
+
 **At Wix:**
 1. Wix account → **Domains**
 2. **Domain Actions** icon next to `picassodoodles.com` → **Transfer away from Wix**
@@ -106,7 +135,10 @@ records:
 for every Netlify site, so it looking generic is correct.
 
 Delete any pre-existing A or CNAME record for `@` or `www` that points somewhere
-else, or they'll fight. Leave MX (email) records alone.
+else, or they'll fight.
+
+If you found real MX records at Wix in Step 2, re-create them here too — DNS
+doesn't come with the domain, so anything you don't copy across is lost.
 
 **Confirm the CNAME value against your own Netlify site.** I read
 `peppy-licorice-348690.netlify.app` off your Firebase screenshot. Netlify
