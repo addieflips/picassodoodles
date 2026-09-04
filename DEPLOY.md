@@ -1,211 +1,164 @@
-# Moving to picassodoodles.com, all on GoDaddy, off Wix
+# Moving to picassodoodles.com, and shutting down Wix
 
 ## Where things stand
 
-| | Domain | Currently at | Becomes |
+| | What | Currently at | Becomes |
 |---|---|---|---|
-| Keep | **picassodoodles.com** | **Wix** | The live site, at GoDaddy |
-| Keep | **picassodoodlesworldwide.com** | GoDaddy | A permanent redirect to the above |
-| Kill | The Wix site + plan | Wix | Gone |
+| Domain | **picassodoodles.com** | **Wix** (registrar) | Registered at GoDaddy, pointed at Netlify |
+| Domain | **picassodoodlesworldwide.com** | GoDaddy (registrar) | Permanent redirect to the above |
+| Hosting | The site files | **Netlify** | Unchanged — stays on Netlify |
+| Kill | Wix site + plan | Wix | Gone |
 
-Both domains are confirmed registered, so nothing needs buying except hosting.
+**Your site is hosted on Netlify, not Wix and not GoDaddy.** The Firebase
+authorized-domains list includes `peppy-licorice-348690.netlify.app`, which is a
+Netlify address. Netlify is almost certainly wired to this GitHub repo and
+republishes the site automatically every time you save a change here.
+
+That's a good setup and worth keeping: it's free, SSL is automatic and
+self-renewing, and you never upload a file by hand. So **no GoDaddy hosting
+purchase is needed** — this whole job is a domain move, not a hosting move.
 
 > ### You already own picassodoodles.com — do not try to buy it
 >
-> It's registered to you, through Wix. You are **moving** it to GoDaddy, not
+> It's registered to you through Wix. You are **moving** it to GoDaddy, not
 > purchasing it. If you search for it on GoDaddy it will show as unavailable
 > (because it's yours), and GoDaddy may offer a **backorder**, **domain broker**,
-> or **"make an offer"** service. Do not use any of those — they're for buying a
-> domain off a stranger, they cost real money, and they cannot get you a domain
-> you already hold.
+> or **"make an offer"** service. Don't use any of those — they're for buying a
+> domain off a stranger, they cost real money, and they can't get you a domain you
+> already hold. The correct path is **Domains → Transfer a domain** (Step 2).
+
+> ### ⚠️ Do not cancel Wix until the transfer finishes
 >
-> The correct path is **Domains → Transfer a domain** (Step 4). The ~$10–20
-> transfer fee includes a full year of renewal, so it's not money lost.
-
-The complication: **the domain you want to keep is the one stuck at Wix.** So this
-isn't just a content move — the *registration* of `picassodoodles.com` has to be
-transferred from Wix to GoDaddy, and that takes up to 7 days and can't be rushed.
-
-> ## ⚠️ Read this before you touch anything
->
-> **Do not cancel the Wix plan or account until the domain transfer has fully
-> completed.** Wix is the current registrar for `picassodoodles.com`. Cancelling
-> first can cost you the domain outright, and it is the one mistake in this whole
-> process that isn't recoverable. Cancelling Wix is the *last* step, not the first.
-
-The plan below gets your real site live on GoDaddy **first**, on the domain you
-already control there, so nothing is ever down while the slow transfer runs in
-the background.
+> Wix is the current registrar for `picassodoodles.com`. Cancelling the plan or
+> account first can forfeit the domain, and it's the one mistake here that isn't
+> recoverable. Cancelling Wix is the **last** step.
 
 ---
 
-## Step 0 — Check for the 60-day lock (do this today, it sets your timeline)
+## Step 1 — Finish the Firebase list (2 minutes, do it now)
 
-ICANN blocks domain transfers for 60 days after a domain is registered,
-transferred, or has its contact info changed. If `picassodoodles.com` tripped any
-of those recently, you simply cannot move it yet.
+Your admin panel logs in by texting a code to your phone via Firebase, and
+Firebase won't send that code from a domain it doesn't recognize.
 
-Wix account → **Domains** → `picassodoodles.com` → check the registration date and
-whether it's locked.
-
-- **Not locked** → carry on, the whole thing takes about a week.
-- **Locked** → note the date it lifts. Everything in Steps 1–3 still proceeds
-  normally in the meantime; only Step 4 waits.
-
-Two other things to check while you're in there:
-
-- **Was the domain free with your Wix Premium plan?** Free-with-plan domains
-  often can't be transferred during the first year. If so, you may need to wait
-  it out or pay to release it — Wix support can tell you which applies.
-- **Is Private Registration on?** Turn it **off** before you start the transfer.
-  The authorization code gets emailed to the registrant contact address, and
-  privacy protection can hide or block that email.
-
----
-
-## Step 1 — Buy GoDaddy Web Hosting
-
-> **Buy "Web Hosting" (Linux / cPanel). Do NOT buy "Websites + Marketing" (Airo).**
-
-This is the decision that matters most. Websites + Marketing is GoDaddy's
-drag-and-drop builder — it's their Wix equivalent, and it **cannot host these
-files**. It only lets you paste small snippets into their templates. Buying it
-means rebuilding the site in another builder, which is the exact thing you're
-trying to get away from.
-
-Web Hosting gives you a `public_html` folder you upload real files into. The
-cheapest **Economy** tier is plenty — this is two static HTML files.
-
-When setup asks which domain to attach, choose **`picassodoodlesworldwide.com`**
-for now. It's already in your GoDaddy account, so DNS wires up automatically and
-you get a working site within the hour. `picassodoodles.com` comes later, once
-it's actually yours at GoDaddy.
-
-## Step 2 — Upload the site
-
-1. GoDaddy → My Products → Web Hosting → **Manage** → **cPanel Admin** → **File Manager**
-2. Open **`public_html`** — this is the web root
-3. Delete GoDaddy's placeholder page if one is there (leave `cgi-bin` alone)
-4. Upload from this repo:
-   - `index.html` → the main site
-   - `admin.html` → your admin panel
-   - `.htaccess` → redirects and caching
-   - `robots.txt`, `sitemap.xml` → for Google
-
-**Turn on SSL before the `.htaccess` matters:** cPanel → **SSL/TLS Status** →
-select the domain → **Run AutoSSL**. Wait ~15 min. The `.htaccess` forces HTTPS,
-so if the certificate isn't ready you'll get a redirect loop into a cert warning.
-If that happens, rename `.htaccess` to `htaccess.txt`, fix SSL, rename it back.
-
-The `.htaccess` I wrote is **host-agnostic on purpose** — its HTTPS and www rules
-work on whichever domain is attached, so it's safe right now on
-`picassodoodlesworldwide.com`. The block that forces everything to
-`picassodoodles.com` is commented out, with a warning. Leave it commented until
-Step 5.
-
-## Step 3 — Firebase (the site breaks without this)
-
-⚠️ Your admin panel logs in by **texting a code to your phone** via Firebase.
-Firebase refuses to send that code from a domain it doesn't recognize.
-
-[Firebase Console](https://console.firebase.google.com/) → project
-**picasso-doodles** → **Authentication** → **Settings** → **Authorized domains** →
-**Add domain**. Add all four of these now, so you never have to think about it
-again as the domain flips:
+You've already added the two `worldwide` entries. Two are still missing:
 
 - `picassodoodles.com`
 - `www.picassodoodles.com`
-- `picassodoodlesworldwide.com`
-- `www.picassodoodlesworldwide.com`
 
-**Nothing here comes from Wix.** A "hostname" is just the domain text itself —
-you type those four lines into the Firebase box by hand. There's no code, key, or
-setting to fetch from Wix or GoDaddy for this step. You can do it right now,
-before you buy hosting or start the transfer.
+[Firebase Console](https://console.firebase.google.com/) → project
+**picasso-doodles** → **Authentication** → **Settings** → **Authorized domains** →
+**Add domain**.
 
-Leave the existing entries (`localhost`, `picasso-doodles.firebaseapp.com`) alone.
+A "hostname" here is just the domain text — type it in by hand, bare, with no
+`https://`. Nothing is fetched from Wix, GoDaddy, or Netlify for this step.
 
-**Test it:** load `/admin.html` on the live site and request a login code. If the
-text arrives, you're good. If reCAPTCHA fails or you see an unauthorized-domain
-error, there's a typo — enter the bare hostname only, no `https://`.
+**Leave everything already in the list alone**, including the `.netlify.app` entry
+— that's your live site's own address, and removing it breaks admin login
+immediately. Adding these two now means the login keeps working straight through
+the domain switch with no gap.
 
-**Cloudinary** (photo uploads, cloud name `picassodogs`) usually needs nothing. If
-uploads fail: Cloudinary → Settings → Upload → your unsigned preset → check
-whether **Allowed origins** has a whitelist. If it's empty, nothing to do.
+## Step 2 — Transfer picassodoodles.com from Wix to GoDaddy
 
-> **At this point your real site is live on GoDaddy and fully working.** Everything
-> below is about moving the name across. Take your time with it.
+The slow part. Up to 7 days, and it can't be rushed.
 
----
+**First, check the 60-day lock.** ICANN blocks transfers for 60 days after a
+domain is registered, transferred, or has its contact info edited. Wix →
+**Domains** → `picassodoodles.com` → check the registration date and lock status.
+If it's locked, note when it lifts; nothing else in this guide is blocked by it.
 
-## Step 4 — Transfer picassodoodles.com from Wix to GoDaddy
-
-This is the slow part. Up to 7 days.
+Two more things while you're there:
+- **Was the domain free with your Wix Premium plan?** Free-with-plan domains often
+  can't transfer during the first year. Wix support can tell you.
+- **Turn off Private Registration.** The authorization code is emailed to the
+  registrant address, and privacy protection can hide or block it.
 
 **At Wix:**
 1. Wix account → **Domains**
-2. Click the **Domain Actions** icon next to `picassodoodles.com`
-3. **Transfer away from Wix** → **I Still Want to Transfer**
-4. Make sure the domain shows as **unlocked**
-5. Wix emails a **transfer authorization code** (also called an EPP or auth code)
-   to your registrant contact address — check spam if it doesn't arrive
+2. **Domain Actions** icon next to `picassodoodles.com` → **Transfer away from Wix**
+3. **I Still Want to Transfer**, and make sure the domain shows **unlocked**
+4. Wix emails a **transfer authorization code** (also called an EPP or auth code)
+   — check spam
 
 **At GoDaddy:**
-6. GoDaddy → **Domains** → **Transfer a domain** → enter `picassodoodles.com`
-7. Paste the authorization code
-8. Pay the transfer fee (~$10–20 — it includes a year's renewal, so it's not
-   wasted money)
-9. Approve the confirmation email GoDaddy sends
+5. **Domains** → **Transfer a domain** → enter `picassodoodles.com`
+6. Paste the authorization code
+7. Pay the transfer fee (~$10–20 — it includes a year's renewal, so it's not lost
+   money)
+8. Approve GoDaddy's confirmation email
 
-Then wait. It can complete in a couple of days or take the full week. GoDaddy
-shows the status under Domains the whole time.
+Then wait. **Change nothing during the wait.** The Wix page stays up on
+`picassodoodles.com`, your real site stays up on `picassodoodlesworldwide.com`,
+and nothing is down.
 
-**During the wait, change nothing.** The Wix site stays up on `picassodoodles.com`,
-your new site stays up on `picassodoodlesworldwide.com`, both work, no downtime.
-
-## Step 5 — Switch the domains over
+## Step 3 — Point the domain at Netlify
 
 Once GoDaddy shows `picassodoodles.com` in your account:
 
-1. **Attach it to the hosting.** cPanel → **Domains** → add `picassodoodles.com`
-   and point it at the same `public_html`. If your Economy plan won't allow a
-   second domain, change the account's **primary domain** to `picassodoodles.com`
-   instead (GoDaddy support will do this in a minute if the option isn't obvious).
-2. **Re-run AutoSSL** for the new domain — cPanel → SSL/TLS Status. Don't skip
-   this or the site loads with a certificate warning.
-3. **Confirm `https://picassodoodles.com` serves your site**, not Wix's.
-4. **Now** turn on the canonical redirect: edit `.htaccess` and uncomment the two
-   lines in the `PHASE 3 ONLY` block. That permanently 301s
-   `picassodoodlesworldwide.com` → `picassodoodles.com`.
+GoDaddy → **My Products** → `picassodoodles.com` → **Manage DNS**. Add these two
+records:
 
-If cPanel won't attach the old domain as an alias, do the redirect at the
-registrar instead: GoDaddy → the old domain → **Manage DNS** → **Forwarding** →
-forward to `https://picassodoodles.com`, type **Permanent (301)**. The 301 is what
-tells Google to move your search ranking; a 302 doesn't.
+| Type | Name | Value | TTL |
+|---|---|---|---|
+| **A** | `@` | `75.2.60.5` | 1 hour |
+| **CNAME** | `www` | `peppy-licorice-348690.netlify.app` | 1 hour |
 
-**Keep `picassodoodlesworldwide.com` registered** for at least a year. Every old
-link, business card, and Google result still points at it. It's cheap insurance.
+`@` means the bare domain. `75.2.60.5` is Netlify's load balancer — it's the same
+for every Netlify site, so it looking generic is correct.
 
-## Step 6 — Now cancel Wix
+Delete any pre-existing A or CNAME record for `@` or `www` that points somewhere
+else, or they'll fight. Leave MX (email) records alone.
 
-Only once `https://picassodoodles.com` is confirmed serving your GoDaddy site:
+**Confirm the CNAME value against your own Netlify site.** I read
+`peppy-licorice-348690.netlify.app` off your Firebase screenshot. Netlify
+dashboard → your site → the address shown at the top. If it differs, use theirs.
 
-1. Wix → **Settings** → **Subscriptions** — cancel the Premium plan
-2. Confirm `picassodoodles.com` no longer appears under Wix Domains (it shouldn't,
-   post-transfer)
+DNS can take up to a day to spread, though it's usually much faster.
+
+## Step 4 — Add the domain in Netlify and make it primary
+
+Netlify → your site → **Domain management** → **Add a domain** →
+`picassodoodles.com`.
+
+Then the important bit: **set `picassodoodles.com` as the primary domain.**
+Netlify automatically 301-redirects every non-primary domain to the primary one.
+That single setting is what makes `picassodoodlesworldwide.com` forward to
+`picassodoodles.com` — a permanent 301 is exactly what tells Google to move your
+search ranking across, and you get it without configuring anything.
+
+**Keep `picassodoodlesworldwide.com` attached to the Netlify site** as a secondary
+domain. That's what performs the redirect. Remove it and old links just break.
+
+Netlify then issues a free SSL certificate automatically, usually within minutes
+of DNS resolving. If it doesn't appear, Domain management → **HTTPS** → **Verify
+DNS configuration** / **Renew certificate**.
+
+**Test before moving on:** load `https://picassodoodles.com` (should be your
+site, with a padlock), then `https://picassodoodlesworldwide.com` (should bounce
+to the new domain), then `/admin.html` and request a login code (the text should
+arrive — that's Step 1 paying off).
+
+## Step 5 — Now cancel Wix
+
+Only once all three tests above pass:
+
+1. Confirm `picassodoodles.com` no longer appears under Wix → Domains
+2. Wix → **Settings** → **Subscriptions** → cancel the Premium plan
 3. Delete the Wix site, and close the account if you want
 
-Download anything you still want off the Wix site first — photos, testimonials,
-copy. Once it's deleted it's gone.
+**Download anything you still want off the Wix site first** — photos,
+testimonials, copy. Once deleted it's gone.
 
-## Step 7 — Tell Google
+**Keep `picassodoodlesworldwide.com` registered** at GoDaddy for at least a year.
+Every old link, business card, and search result still points there, and the
+redirect only works while you own it. It's cheap insurance.
+
+## Step 6 — Tell Google
 
 1. [Search Console](https://search.google.com/search-console) → add
-   `picassodoodles.com` as a property → verify with the **HTML file** method (drop
-   the file into `public_html` like the others)
+   `picassodoodles.com` as a property
 2. Submit `https://picassodoodles.com/sitemap.xml`
-3. If `picassodoodlesworldwide.com` is in Search Console, use the **Change of
-   Address** tool to formally move it
+3. If `picassodoodlesworldwide.com` is already in Search Console, use the **Change
+   of Address** tool to formally move it
 4. Update the domain off-site: Instagram bio, Google Business Profile, Good Dog,
    Facebook, TikTok, YouTube
 
@@ -215,17 +168,16 @@ copy. Once it's deleted it's gone.
 
 | # | Do | Then wait for |
 |---|---|---|
-| 0 | Check the 60-day lock at Wix | — |
-| 1 | Buy GoDaddy **Web Hosting (cPanel)**, attach old domain | DNS, up to ~1 hr |
-| 2 | Upload files, run AutoSSL | certificate, ~15 min |
-| 3 | Add the 4 hostnames to Firebase | — |
-| 4 | Start Wix → GoDaddy **transfer** of picassodoodles.com | registrars, up to 7 days |
-| 5 | Attach new domain, re-run SSL, uncomment redirect block | certificate, ~15 min |
-| 6 | **Then** cancel Wix | — |
-| 7 | Search Console + update social links | — |
+| 1 | Add the 2 missing hostnames in Firebase | — |
+| 2 | Transfer picassodoodles.com, Wix → GoDaddy | registrars, up to 7 days |
+| 3 | Add A + CNAME records at GoDaddy | DNS, up to a day |
+| 4 | Add domain in Netlify, set it **primary** | certificate, minutes |
+| 5 | **Then** cancel Wix | — |
+| 6 | Search Console + update social links | — |
 
-The "wait" column is time the internet needs, not time you spend. Your own
-clicking across all seven steps is well under an hour total.
+The "wait" column is time the internet needs, not time you spend. Your actual
+clicking is well under an hour across all six steps. Nothing you buy, and no
+hosting to set up.
 
 ---
 
@@ -234,28 +186,37 @@ clicking across all seven steps is well under an hour total.
 - Every `picassodoodlesworldwide.com` in the Terms and Privacy Policy copy is now
   `picassodoodles.com` (3 in `index.html`, 1 in `admin.html`)
 - Canonical + Open Graph tags in `index.html` pointing at
-  `https://picassodoodles.com/`, so previews and search settle on the new domain
+  `https://picassodoodles.com/`, so link previews and search settle on the new
+  domain rather than splitting between the two
 - `noindex` on `admin.html` to keep the admin panel out of search results
-- `.htaccess`, `robots.txt`, `sitemap.xml`
+- `netlify.toml` — security headers, no-cache on HTML so published edits show up
+  immediately, and `X-Robots-Tag` on the admin page
+- `robots.txt` and `sitemap.xml`
+- **Removed `.htaccess`.** It was written for Apache/cPanel hosting. Netlify
+  ignores it completely, so it was dead weight that would have misled whoever read
+  this repo next.
 
-The canonical tag names `picassodoodles.com` while the site is temporarily served
-at the old domain. That's intentional — it's the correct end state, it's harmless
-for a week, and it means nothing to remember to change later.
+`netlify.toml` deliberately has **no `[build]` section**, so your existing publish
+settings in the Netlify UI are untouched and adding it can't break the deploy.
+
+The canonical tag names `picassodoodles.com` while the site is still served at the
+old domain. That's intentional — it's the correct end state, harmless for a week,
+and nothing to remember to change later. If the 60-day lock pushes this out by
+months, say so and I'll point it at the old domain in the meantime.
 
 **Deliberately unchanged:**
 - Instagram handle `@picassodoodlesworldwide` — a live account, not the domain.
   Changing the link would break it. Rename it on Instagram first if you want them
   to match.
-- Contact email `picassodoodlesworldwide@gmail.com` — a Gmail address, unaffected.
-  If you want `hello@picassodoodles.com`, that's a separate GoDaddy purchase plus
-  a code change in 4 places.
+- Contact email `picassodoodlesworldwide@gmail.com` — a Gmail address, unaffected
+  by any of this.
 - The business name "Picasso Doodles Worldwide" in the policy headers — the
   *domain* shortened; whether the *brand* does is your call.
 
-## Publishing edits later
+## Publishing edits
 
-The files on GoDaddy are a **copy**. Editing them in GitHub does not update the
-live site — re-upload the changed file through cPanel File Manager.
+Netlify redeploys automatically when you commit to this repo — edit
+`index.html` here and the live site updates on its own within a minute or two.
 
 Day-to-day content (puppies, dogs, inquiries) lives in Firebase, not in these
 files. Those edits go through the admin panel and appear instantly.
@@ -264,7 +225,7 @@ files. Those edits go through the admin panel and appear instantly.
 
 The "✨ Generate" AI buttons in the admin panel (`aiGen` in `admin.html`) call the
 Anthropic API with no API key attached, so they fail every time with "Error. Try
-again." Pre-existing and unrelated to the move — flagging so you know the
-migration didn't cause it. Note that fixing it by pasting a key into `admin.html`
-would expose that key to anyone viewing page source, so it needs a small
-server-side piece instead.
+again." Pre-existing and unrelated to this move — flagging so you know the
+migration didn't cause it. Fixing it by pasting a key into `admin.html` would
+expose that key to anyone viewing page source, so it needs a small server-side
+piece instead. Netlify Functions would handle it neatly if you want it working.

@@ -1,0 +1,33 @@
+# Picasso Doodles — Netlify configuration
+#
+# Deliberately contains NO [build] section. The publish directory stays
+# exactly as it's already configured in the Netlify UI, so adding this
+# file cannot break the existing auto-deploy. It only adds headers.
+#
+# Things you do NOT need to configure here:
+#   - HTTPS       Netlify issues and renews a free certificate automatically
+#   - www -> apex Handled by setting the primary domain in the Netlify UI
+#   - old -> new  Same: non-primary domains 301 to the primary automatically
+
+# ── Security headers, all pages ──────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# ── Never cache the HTML ─────────────────────────────────────────
+# Without this a browser can hold a stale copy after you publish an
+# edit, and you'd think the change didn't save.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+# ── Keep the admin panel out of search results ───────────────────
+# Belt-and-braces alongside the noindex meta tag in admin.html.
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
