@@ -10,6 +10,18 @@
 
 Both domains are confirmed registered, so nothing needs buying except hosting.
 
+> ### You already own picassodoodles.com — do not try to buy it
+>
+> It's registered to you, through Wix. You are **moving** it to GoDaddy, not
+> purchasing it. If you search for it on GoDaddy it will show as unavailable
+> (because it's yours), and GoDaddy may offer a **backorder**, **domain broker**,
+> or **"make an offer"** service. Do not use any of those — they're for buying a
+> domain off a stranger, they cost real money, and they cannot get you a domain
+> you already hold.
+>
+> The correct path is **Domains → Transfer a domain** (Step 4). The ~$10–20
+> transfer fee includes a full year of renewal, so it's not money lost.
+
 The complication: **the domain you want to keep is the one stuck at Wix.** So this
 isn't just a content move — the *registration* of `picassodoodles.com` has to be
 transferred from Wix to GoDaddy, and that takes up to 7 days and can't be rushed.
@@ -98,13 +110,18 @@ Firebase refuses to send that code from a domain it doesn't recognize.
 
 [Firebase Console](https://console.firebase.google.com/) → project
 **picasso-doodles** → **Authentication** → **Settings** → **Authorized domains** →
-**Add domain**. Add all of these now, so you never have to think about it again
-as the domain flips:
+**Add domain**. Add all four of these now, so you never have to think about it
+again as the domain flips:
 
 - `picassodoodles.com`
 - `www.picassodoodles.com`
 - `picassodoodlesworldwide.com`
 - `www.picassodoodlesworldwide.com`
+
+**Nothing here comes from Wix.** A "hostname" is just the domain text itself —
+you type those four lines into the Firebase box by hand. There's no code, key, or
+setting to fetch from Wix or GoDaddy for this step. You can do it right now,
+before you buy hosting or start the transfer.
 
 Leave the existing entries (`localhost`, `picasso-doodles.firebaseapp.com`) alone.
 
@@ -196,16 +213,19 @@ copy. Once it's deleted it's gone.
 
 ## The short version
 
-| # | Do | Wait |
+| # | Do | Then wait for |
 |---|---|---|
 | 0 | Check the 60-day lock at Wix | — |
-| 1 | Buy GoDaddy **Web Hosting (cPanel)**, attach old domain | ~1 hr |
-| 2 | Upload files, run AutoSSL | ~15 min |
-| 3 | Add all 4 domains to Firebase authorized domains | — |
-| 4 | Start Wix → GoDaddy transfer of picassodoodles.com | **up to 7 days** |
-| 5 | Attach new domain, re-run SSL, uncomment redirect block | ~1 hr |
+| 1 | Buy GoDaddy **Web Hosting (cPanel)**, attach old domain | DNS, up to ~1 hr |
+| 2 | Upload files, run AutoSSL | certificate, ~15 min |
+| 3 | Add the 4 hostnames to Firebase | — |
+| 4 | Start Wix → GoDaddy **transfer** of picassodoodles.com | registrars, up to 7 days |
+| 5 | Attach new domain, re-run SSL, uncomment redirect block | certificate, ~15 min |
 | 6 | **Then** cancel Wix | — |
 | 7 | Search Console + update social links | — |
+
+The "wait" column is time the internet needs, not time you spend. Your own
+clicking across all seven steps is well under an hour total.
 
 ---
 
