@@ -142,12 +142,36 @@ hours, and you would not get it back.
 4. Wix emails a **transfer authorization code** (also called an EPP or auth code)
    — check spam
 
+> #### The authorization code is a credential with a deadline
+>
+> Treat it like a password — it's the key that moves your domain. Don't paste it
+> anywhere but GoDaddy's transfer form, and don't forward the email on. If it does
+> leak before you use it, cancel the transfer request at Wix and request a new
+> code; that invalidates the old one.
+>
+> **It expires in 7 days.** Miss that window and you start Step 2 over from the
+> beginning — not fatal, just annoying. Use it the same day you get it.
+>
+> **Copy and paste it, never retype it.** These codes are case-sensitive and full
+> of symbols that are easy to get wrong by eye — `O` vs `0`, `l` vs `1`. Watch for
+> a trailing space sneaking in when you copy, which is the most common reason a
+> valid code gets rejected.
+
 **At GoDaddy:**
 5. **Domains** → **Transfer a domain** → enter `picassodoodles.com`
 6. Paste the authorization code
 7. Pay the transfer fee (~$10–20 — it includes a year's renewal, so it's not lost
    money)
-8. Approve GoDaddy's confirmation email
+8. **Approve the confirmation emails.** GoDaddy sends one to the registrant
+   address, and Wix usually sends its own "confirm transfer away" message.
+   Approving both immediately is the difference between the transfer landing in
+   a day or two versus sitting out the full 5-day auto-approval window. Check
+   spam — this is the step that most often stalls, and it stalls silently.
+
+**Once GoDaddy shows the domain in your account**, two bits of tidying: turn
+**auto-renew on**, and turn **domain privacy on** (you switched it off in Step 2
+so the code could reach you). Auto-renew matters more than it sounds — a lapsed
+domain with real traffic gets taken within hours.
 
 Then wait. **Change nothing during the wait.** The Wix page stays up on
 `picassodoodles.com`, your real site stays up on `picassodoodlesworldwide.com`,
