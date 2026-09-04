@@ -180,10 +180,22 @@ message is generic and tells you nothing, so work through it cheapest-first:
    and privacy extensions. Costs 30 seconds and fixes this more often than it
    should.
 
-2. **Check the lock at Wix.** Wix → Domains → `picassodoodles.com`. Requesting the
-   authorization code and *unlocking* the domain are separate actions, and
-   GoDaddy checks transferability the moment you enter the name. Unlock it, wait
-   a few minutes, retry.
+2. **Verify the lock — but expect it to be fine.** Wix *automatically* unlocks the
+   domain and turns off privacy protection when it issues the authorization code,
+   so if you have a code, this is probably already done. Don't take a UI's word
+   for it either way — check the registry directly at
+   [lookup.icann.org](https://lookup.icann.org) and read the **Domain Status**
+   line:
+
+   - `ok` or `active` → **unlocked**, ready to transfer
+   - `clientTransferProhibited` → **still locked**; Wix → Domains → select the
+     domain → **Advanced** to turn the lock off
+   - `pendingTransfer` → a transfer is **already running**; let it finish rather
+     than starting another
+
+   That lookup is the objective answer, straight from the registry, and it also
+   shows the domain's creation and last-updated dates — which is what tells you
+   whether the 60-day lock applies.
 
 3. **Check for a transfer already in progress.** If an earlier attempt half-
    succeeded, GoDaddy → Domains may already list `picassodoodles.com` as pending.
@@ -223,7 +235,9 @@ Work down this list — the first two cause most failures.
 4. **Case.** These codes are case-sensitive. Autocorrect and phone keyboards like
    to capitalise a leading letter.
 
-5. **The 60-day lock**, if none of the above apply. Blocked if the domain was
+5. **The 60-day lock**, if none of the above apply. Check the creation and
+   updated dates on [lookup.icann.org](https://lookup.icann.org) — within 60 days
+   of either and this is your answer. Blocked if the domain was
    registered or transferred within 60 days, **or if the registrant contact
    changed** in that window. Worth knowing: a payment-method change is not
    supposed to count, but if Wix also updated the registrant contact as part of
