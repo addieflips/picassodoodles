@@ -168,6 +168,37 @@ hours, and you would not get it back.
    a day or two versus sitting out the full 5-day auto-approval window. Check
    spam — this is the step that most often stalls, and it stalls silently.
 
+#### If GoDaddy errors on the domain name, before asking for a code
+
+"There was an error processing your request. Please try again." on the screen
+where you type `picassodoodles.com` is a **different failure** from a rejected
+code — GoDaddy hasn't asked for the code yet, so the code isn't involved. The
+message is generic and tells you nothing, so work through it cheapest-first:
+
+1. **Retry in a private/incognito window**, or a different browser. GoDaddy's
+   transfer page is genuinely flaky and breaks on stale sessions, ad blockers,
+   and privacy extensions. Costs 30 seconds and fixes this more often than it
+   should.
+
+2. **Check the lock at Wix.** Wix → Domains → `picassodoodles.com`. Requesting the
+   authorization code and *unlocking* the domain are separate actions, and
+   GoDaddy checks transferability the moment you enter the name. Unlock it, wait
+   a few minutes, retry.
+
+3. **Check for a transfer already in progress.** If an earlier attempt half-
+   succeeded, GoDaddy → Domains may already list `picassodoodles.com` as pending.
+   Starting a second transfer on top of a pending one errors out. Continue the
+   existing one rather than starting over.
+
+4. **Ask GoDaddy support.** They can see the actual registry response, which is
+   the thing this error is hiding from you. Their chat is quick, and this is a
+   two-minute question for someone who can read the log. Worth doing early rather
+   than guessing — especially since the authorization code expires in 7 days and
+   burning days on trial and error means starting Step 2 again.
+
+Your authorization code stays valid while you sort this out. If it does lapse,
+request a new one at Wix — that's routine, not a setback.
+
 #### If GoDaddy rejects the authorization code
 
 Work down this list — the first two cause most failures.
