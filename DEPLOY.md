@@ -168,6 +168,40 @@ hours, and you would not get it back.
    a day or two versus sitting out the full 5-day auto-approval window. Check
    spam — this is the step that most often stalls, and it stalls silently.
 
+#### If GoDaddy rejects the authorization code
+
+Work down this list — the first two cause most failures.
+
+1. **Is the domain actually unlocked at Wix?** Requesting the code and unlocking
+   the domain are *separate* things, and a locked domain fails no matter how
+   correct the code is. Wix → Domains → `picassodoodles.com` → confirm it reads
+   unlocked. This is the single most common cause.
+
+2. **Does your code contain `<`, `>`, `&`, or `"`?** Many web forms silently strip
+   these as a security measure, so a correct code arrives at the server mangled
+   and gets rejected — with no indication that anything was altered. You cannot
+   work around it by escaping or retyping. Request a **new code** from Wix
+   instead; they're randomly generated, and the replacement most likely won't
+   contain an awkward character. Requesting a new code invalidates the old one,
+   which is fine.
+
+3. **Trailing whitespace.** Double-clicking or triple-clicking to select often
+   grabs a trailing space or newline. Paste into a plain text editor first, check
+   the length, then copy again.
+
+4. **Case.** These codes are case-sensitive. Autocorrect and phone keyboards like
+   to capitalise a leading letter.
+
+5. **The 60-day lock**, if none of the above apply. Blocked if the domain was
+   registered or transferred within 60 days, **or if the registrant contact
+   changed** in that window. Worth knowing: a payment-method change is not
+   supposed to count, but if Wix also updated the registrant contact as part of
+   that change, the clock may have restarted. Wix support can tell you the
+   registrant's last-modified date — that's the number that settles it.
+
+If 1–4 are clean and it still fails, it's 5, and no amount of retrying the code
+will help. Ask Wix support directly when the domain becomes transferable.
+
 **Once GoDaddy shows the domain in your account**, two bits of tidying: turn
 **auto-renew on**, and turn **domain privacy on** (you switched it off in Step 2
 so the code could reach you). Auto-renew matters more than it sounds — a lapsed
