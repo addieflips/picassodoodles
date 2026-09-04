@@ -1,20 +1,40 @@
 # Picasso Doodles — GoDaddy cPanel (Linux/Apache) hosting config
-# Upload this file to public_html alongside index.html and admin.html.
-# Note: .htaccess is a hidden file. In cPanel File Manager turn on
-# Settings > "Show Hidden Files (dotfiles)" or you will not see it.
+# Upload to public_html alongside index.html and admin.html.
+#
+# .htaccess is a hidden file. In cPanel File Manager turn on
+# Settings > "Show Hidden Files (dotfiles)" or you won't see it.
+#
+# IMPORTANT: this file is written to be safe BEFORE picassodoodles.com
+# has finished transferring from Wix. The rules below are host-agnostic:
+# they work correctly on whatever domain is currently attached to the
+# hosting. The block that forces one canonical domain is commented out
+# and must stay that way until the transfer completes -- see PHASE 3.
 
-# ── Force HTTPS and the bare (non-www) domain ────────────────────
-# Everything lands on https://picassodoodles.com/ so there is exactly
-# one canonical address for Google and for Firebase auth.
 RewriteEngine On
 
-# http -> https
+# ── Force HTTPS ──────────────────────────────────────────────────
+# Host-agnostic: redirects to https on whatever domain was requested,
+# so this is safe on picassodoodlesworldwide.com today and on
+# picassodoodles.com later.
 RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://picassodoodles.com/$1 [R=301,L]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
-# www -> bare
-RewriteCond %{HTTP_HOST} ^www\.picassodoodles\.com$ [NC]
-RewriteRule ^(.*)$ https://picassodoodles.com/$1 [R=301,L]
+# ── Strip www ────────────────────────────────────────────────────
+# Also host-agnostic: www.anything -> anything
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ── PHASE 3 ONLY — do not uncomment yet ──────────────────────────
+# Uncomment these two lines ONLY after picassodoodles.com has fully
+# transferred to GoDaddy and is attached to this hosting account.
+# They send every other domain (picassodoodlesworldwide.com included)
+# to picassodoodles.com with a permanent 301.
+#
+# Uncommenting early sends your visitors to a domain still parked on
+# Wix, which is the one way to actually break the live site.
+#
+# RewriteCond %{HTTP_HOST} !^picassodoodles\.com$ [NC]
+# RewriteRule ^(.*)$ https://picassodoodles.com/$1 [R=301,L]
 
 # ── Default document ─────────────────────────────────────────────
 DirectoryIndex index.html
@@ -23,8 +43,8 @@ DirectoryIndex index.html
 Options -Indexes
 
 # ── Caching ──────────────────────────────────────────────────────
-# HTML is never cached, so edits you publish show up immediately.
-# Static assets are cached for a year.
+# HTML is never cached so republished edits appear immediately.
+# Static assets cached for a year.
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html                 "access plus 0 seconds"
