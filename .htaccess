@@ -1,0 +1,57 @@
+# Picasso Doodles — GoDaddy cPanel (Linux/Apache) hosting config
+# Upload this file to public_html alongside index.html and admin.html.
+# Note: .htaccess is a hidden file. In cPanel File Manager turn on
+# Settings > "Show Hidden Files (dotfiles)" or you will not see it.
+
+# ── Force HTTPS and the bare (non-www) domain ────────────────────
+# Everything lands on https://picassodoodles.com/ so there is exactly
+# one canonical address for Google and for Firebase auth.
+RewriteEngine On
+
+# http -> https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://picassodoodles.com/$1 [R=301,L]
+
+# www -> bare
+RewriteCond %{HTTP_HOST} ^www\.picassodoodles\.com$ [NC]
+RewriteRule ^(.*)$ https://picassodoodles.com/$1 [R=301,L]
+
+# ── Default document ─────────────────────────────────────────────
+DirectoryIndex index.html
+
+# ── Don't list directory contents ────────────────────────────────
+Options -Indexes
+
+# ── Caching ──────────────────────────────────────────────────────
+# HTML is never cached, so edits you publish show up immediately.
+# Static assets are cached for a year.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── Compression ──────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Basic security headers ───────────────────────────────────────
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
